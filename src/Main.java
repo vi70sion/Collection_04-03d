@@ -1,7 +1,4 @@
-import java.security.PublicKey;
 import java.util.*;
-import java.util.stream.Collectors;
-
 public class Main {
     public static void main(String[] args) {
 
@@ -18,8 +15,7 @@ public class Main {
         int j = 0;
         for(int i = 0; i < skaiciai.length; i += 2) {
             System.out.println(skaiciai[i] + " " + skaiciai[i + 1]);
-            if (skaiciai[i] == skaiciai[i + 1]) lygus[j] = true;
-                else lygus[j] = false;
+            lygus[j] = skaiciai[i] == skaiciai[i + 1];
             System.out.println(lygus[j]);
             j++;
         }
@@ -41,6 +37,7 @@ public class Main {
         myList.add("Tadas");
         System.out.println("Pries rusiavima: " + myList);
         //System.out.println("Pries rusiavima: " + myList.toString());
+        //sort(myList);
         Collections.sort(myList);
         System.out.println("Po rusiavimo: " + myList);
         System.out.println();
@@ -80,13 +77,14 @@ public class Main {
         if(saulesSistema.containsKey(6)){
             saulesSistema.remove(6);
         }
-        System.out.println(saulesSistema.toString());
+        System.out.println(saulesSistema);
+        //System.out.println(saulesSistema.toString());
         System.out.println();
 
         /*Sukurkite kolekciją, kurios elementai būtų visi pirmieji (pagal saugojimo tvarką)
         elementai iš ką tik sukurtų trijų kolekcijų;*/
         List<Object> trysViename = new ArrayList<>();
-        trysViename.add(myList.get(0));
+        trysViename.add(myList.getFirst());
         trysViename.add(duGaideliai.iterator().next()); //kodel taip sudetingai?
         trysViename.add(saulesSistema.get(0));
         System.out.println(trysViename);
@@ -102,7 +100,7 @@ public class Main {
 
         /*Sukurkite mokinių vidurkių kolekciją ir apskaičiuokite skirtumą
         tarp aukščiausio ir žemiausio vidurkio*/
-        TreeSet<Float> vidurkiai = new TreeSet();
+        TreeSet<Float> vidurkiai = new TreeSet<>();
         vidurkiai.add(7.5f);
         vidurkiai.add(8.3f);
         vidurkiai.add(6.9f);
