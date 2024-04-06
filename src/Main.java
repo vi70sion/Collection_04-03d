@@ -47,7 +47,7 @@ public class Main {
         Sudėkite į ją tokius Stringus “Du”, “gaideliai”, “du”, “gaideliai”, “baltus”,
         “žirnius”, “ kūlė”; Atspausdinkite rezultatą ekrane.
         */
-        HashSet<String> duGaideliai = new HashSet<String>() {{
+        HashSet<String> duGaideliai = new HashSet<>() {{
             add("Du");
             add("gaideliai");
             add("du");
@@ -56,7 +56,7 @@ public class Main {
             add("žirnius");
             add("kūlė");
         }};
-        duGaideliai.add("Dar vienas"); //pabandymas
+        duGaideliai.add("Dar vienas"); //kitoks add pabandymas
         System.out.println(duGaideliai);
         System.out.println();
 
@@ -81,52 +81,75 @@ public class Main {
         //System.out.println(saulesSistema.toString());
         System.out.println();
 
+
         /*Sukurkite kolekciją, kurios elementai būtų visi pirmieji (pagal saugojimo tvarką)
         elementai iš ką tik sukurtų trijų kolekcijų;*/
         List<Object> trysViename = new ArrayList<>();
         trysViename.add(myList.getFirst());
-        trysViename.add(duGaideliai.iterator().next()); //kodel taip sudetingai?
+        trysViename.add(duGaideliai.iterator().next()); //HashSet class does not provide a direct method to retrieve the first element
         trysViename.add(saulesSistema.get(0));
         System.out.println(trysViename);
         System.out.println();
 
 
-        /*Sukurkite mokinių sąrašą  (Mokinys turi vardąPavardę, tris pažymius ir pažymių vidurkį).*/
-        Map<String, Pazymiai> mokiniuSarasas = new HashMap<>();
-        mokiniuSarasas.put("Vardas Pavardenis", new Pazymiai(8, 5, 6, 6.33));
-        System.out.println(mokiniuSarasas); // kaip reikia isvesti?
-        System.out.println();
+        /* Sukurkite mokinių sąrašą  (Mokinys turi vardąPavardę, tris pažymius ir pažymių vidurkį).
+         * Sukurkite “žurnalą”, kuriame surašyti visi mokinių vardaiPavardės
+         ir jų vidurkiai:*/
 
+        Mokinys mokinys1 = new Mokinys("Vardas1 Pavarde1", new int[] {8, 7, 9});
+        Mokinys mokinys2 = new Mokinys("Vardas2 Pavarde2", new int[] {10, 7, 8});
+        Mokinys mokinys3 = new Mokinys("Vardas3 Pavarde3", new int[] {5, 7, 4});
+
+        Map<Mokinys, Float> mokiniuSarasas = new HashMap<>();   //mokiniu sarasas
+        mokiniuSarasas.put(mokinys1, mokinys1.vidurkioSkaiciavimas());
+        mokiniuSarasas.put(mokinys2, mokinys1.vidurkioSkaiciavimas());
+        mokiniuSarasas.put(mokinys3, mokinys1.vidurkioSkaiciavimas());
+
+        Map<String, Float> zurnalas = new HashMap<>();          //zurnalas
+        zurnalas.put(mokinys1.vardasPavarde, mokinys1.vidurkioSkaiciavimas());
+        zurnalas.put(mokinys2.vardasPavarde, mokinys2.vidurkioSkaiciavimas());
+        zurnalas.put(mokinys3.vardasPavarde, mokinys3.vidurkioSkaiciavimas());
+
+        System.out.println("Mokiniu zurnalas: (vardas pavarde, vidurkis):");
+        for(Map.Entry<String, Float> entry : zurnalas.entrySet()){
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
+        System.out.println();
 
         /*Sukurkite mokinių vidurkių kolekciją ir apskaičiuokite skirtumą
         tarp aukščiausio ir žemiausio vidurkio*/
-        TreeSet<Float> vidurkiai = new TreeSet<>();
-        vidurkiai.add(7.5f);
-        vidurkiai.add(8.3f);
-        vidurkiai.add(6.9f);
-        vidurkiai.add(9.0f);
-        System.out.println(vidurkiai.higher(7.5f));
-        System.out.println(vidurkiai.lower(8.3f));
 
+        TreeSet<Float> vidurkiuKolekcija = new TreeSet<>();
+        for(Map.Entry<String, Float> entry : zurnalas.entrySet()){
+            vidurkiuKolekcija.add(entry.getValue());
+        }
+        float maxVidurkis = vidurkiuKolekcija.getFirst();
+        float minVidurkis = vidurkiuKolekcija.getFirst();
+        for(Float element : vidurkiuKolekcija){
+            if(maxVidurkis < element) maxVidurkis = element;
+            if(minVidurkis > element) minVidurkis = element;
+        }
+        System.out.printf("Skirtumas tarp auksciausio ir zemiausiu vidurkiu: ");
+        System.out.println(maxVidurkis - minVidurkis);
 
-        /*TreeSet<String, Float> vidurkiai = new TreeSet();
-        vidurkiai.add("Pirmas", 7.5f);
-        vidurkiai.add("Antras", 8.3f);
-        vidurkiai.add("Trecias", 6.9f);
-        vidurkiai.add("Ketvirtas", 9.0f);
-        System.out.println(vidurkiai.higher());
-        System.out.println(vidurkiai.lower());*/
 
     }
 }
-class Pazymiai {
-    Integer i, j, k;
-    Double vidurkis;
-
-    Pazymiai (Integer i,Integer j, Integer k, Double vidurkis ) {
-        this.i = i;
-        this.j = j;
-        this.k = k;
-        this.vidurkis = vidurkis;
+class Mokinys {
+    String vardasPavarde;
+    int[] pazymiai;
+    float vidurkis;
+    public Mokinys (String vardasPavarde, int[] pazymiai) {
+        this.vardasPavarde = vardasPavarde;
+        this.pazymiai = pazymiai;
+    }
+    public float vidurkioSkaiciavimas(){
+        int suma = 0;
+        float vidurkis;
+        for(int i = 0; i < pazymiai.length; i++) {
+            suma += pazymiai[i];
+        }
+        vidurkis = (float) suma/ pazymiai.length;
+        return vidurkis;
     }
 }
